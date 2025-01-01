@@ -1,71 +1,73 @@
 const chatContainer = document.getElementById("chat-container");
 const messageForm = document.getElementById("message-form");
 const userInput = document.getElementById("user-input");
+const initialMessage = document.getElementById("initial-message");
+const textarea = document.getElementById("user-input");
+const apiSelector = document.getElementById("api-selector");
 
 // Create a message bubble
 function createMessageBubble(content, sender = "user") {
   const wrapper = document.createElement("div");
-  wrapper.classList.add("mb-6", "flex", "items-start", "space-x-3");
+  wrapper.classList.add("message-wrapper");
 
-  // Avatar
+  // Avatar (only show avatar for assistant)
   const avatar = document.createElement("div");
-  avatar.classList.add(
-    "w-10",
-    "h-10",
-    "rounded-full",
-    "flex-shrink-0",
-    "flex",
-    "items-center",
-    "justify-center",
-    "font-bold",
-    "text-white"
-  );
-
+  
   if (sender === "assistant") {
-    avatar.classList.add("bg-gradient-to-br", "from-green-400", "to-green-600");
-    avatar.textContent = "A";
-  } else {
-    avatar.classList.add("bg-gradient-to-br", "from-blue-500", "to-blue-700");
-    avatar.textContent = "U";
+    avatar.classList.add("avatar-assistant");
   }
 
-  // Bubble
+  // Message
   const bubble = document.createElement("div");
-  bubble.classList.add(
-    "max-w-full",
-    "md:max-w-2xl",
-    "p-3",
-    "rounded-lg",
-    "whitespace-pre-wrap",
-    "leading-relaxed",
-    "shadow-sm"
-  );
+  bubble.classList.add("message-bubble");
 
   if (sender === "assistant") {
-    bubble.classList.add("bg-gray-200", "text-gray-900");
+    bubble.classList.add("assistant-message");
   } else {
-    bubble.classList.add("bg-blue-600", "text-white");
+    bubble.classList.add("user-message");
   }
 
+  // 줄바꿈 유지
   bubble.textContent = content;
 
-  wrapper.appendChild(avatar);
+  if (sender === "assistant") {
+    wrapper.appendChild(avatar);
+  }
   wrapper.appendChild(bubble);
   return wrapper;
 }
 
 // Scroll to bottom
 function scrollToBottom() {
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  const scrollHeight = chatContainer.scrollHeight;
+  chatContainer.scrollTo({
+    top: scrollHeight,
+    behavior: 'smooth'
+  });
 }
 
-// Simulate assistant response
-function getAssistantResponse(userMessage) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve("가짜 ChatGPT: " + userMessage);
-    }, 1500);
+// Fetch assistant response from the selected backend endpoint
+async function getAssistantResponse(userMessage) {
+  const mode = apiSelector.value;
+  const url =
+    mode === "assistant"
+      ? "http://localhost:8000/assistant"
+      : "http://localhost:8000/chat";
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ message: userMessage }),
   });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data = await response.json();
+  return data.reply;
 }
 
 // Handle form submission
@@ -74,13 +76,50 @@ messageForm.addEventListener("submit", async (e) => {
   const message = userInput.value.trim();
   if (!message) return;
 
-  // User message
+  // 초기 메시지 제거
+  if (initialMessage) {
+    initialMessage.remove();
+  }
+
+  // 사용자 메시지
   chatContainer.appendChild(createMessageBubble(message, "user"));
   userInput.value = "";
   scrollToBottom();
 
   // Assistant response
-  const response = await getAssistantResponse(message);
-  chatContainer.appendChild(createMessageBubble(response, "assistant"));
+  try {
+    const response = await getAssistantResponse(message);
+    chatContainer.appendChild(createMessageBubble(response, "assistant"));
+    scrollToBottom();
+  } catch (error) {
+    console.error("Error fetching assistant response:", error);
+    chatContainer.appendChild(
+      createMessageBubble(
+        "Error fetching response. Check console.",
+        "assistant"
+      )
+    );
+    scrollToBottom();
+  }
+});
+
+// Auto-resize textarea
+textarea.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    if (!e.shiftKey) {
+      e.preventDefault();
+      // 내용이 있을 때만 전송
+      if (this.value.trim()) {
+        messageForm.dispatchEvent(new Event("submit"));
+      }
+    }
+  }
+});
+
+// 자동 높이 조절
+textarea.addEventListener("input", function() {
+  this.style.height = "24px";
+  const newHeight = Math.min(this.scrollHeight, 200);
+  this.style.height = newHeight + "px";
   scrollToBottom();
 });
