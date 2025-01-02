@@ -51,8 +51,8 @@ async function getAssistantResponse(userMessage) {
   const mode = apiSelector.value;
   const url =
     mode === "assistant"
-      ? "http://localhost:8000/assistant"
-      : "http://localhost:8000/chat";
+      ? "https://ssafy-2024-backend-gwangju-3.fly.dev/assistant"
+      : "https://ssafy-2024-backend-gwangju-3.fly.dev/chat";
 
   const response = await fetch(url, {
     method: "POST",
