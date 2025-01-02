@@ -3,7 +3,6 @@ const messageForm = document.getElementById("message-form");
 const userInput = document.getElementById("user-input");
 const initialMessage = document.getElementById("initial-message");
 const textarea = document.getElementById("user-input");
-const apiSelector = document.getElementById("api-selector");
 
 // Create a message bubble
 function createMessageBubble(content, sender = "user") {
@@ -28,7 +27,7 @@ function createMessageBubble(content, sender = "user") {
   }
 
   // 줄바꿈 유지
-  bubble.textContent = content;
+  bubble.innerHTML = marked(content);  // 변환된 HTML을 innerHTML로 설정
 
   if (sender === "assistant") {
     wrapper.appendChild(avatar);
@@ -48,11 +47,7 @@ function scrollToBottom() {
 
 // Fetch assistant response from the selected backend endpoint
 async function getAssistantResponse(userMessage) {
-  const mode = apiSelector.value;
-  const url =
-    mode === "assistant"
-      ? "https://ssafy-2024-backend-gwangju-3.fly.dev/assistant"
-      : "https://ssafy-2024-backend-gwangju-3.fly.dev/chat";
+  const url = "https://ssafy-2024-backend-gwangju-3.fly.dev/assistant";  // 고정된 /assistant URL
 
   const response = await fetch(url, {
     method: "POST",
@@ -101,6 +96,10 @@ messageForm.addEventListener("submit", async (e) => {
   // 사용자 메시지
   chatContainer.appendChild(createMessageBubble(message, "user"));
   userInput.value = "";
+
+  // 입력창 높이 초기화
+  textarea.style.height = "24px"; // 기본 높이로 리셋
+
   scrollToBottom();
 
   // 로딩 중 표시 추가

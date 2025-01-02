@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Shopper</title>
     <link rel="stylesheet" href="./src/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body class="h-screen flex flex-col bg-gray-50">
@@ -35,10 +36,6 @@
         <form id="message-form" class="flex items-center space-x-2">
             <div class="input-container">
                 <textarea id="user-input" rows="1" placeholder="질문을 입력하세요..." required></textarea>
-                <select id="api-selector" class="border border-gray-300 rounded-md p-2">
-                    <option value="naive" selected>Naive (/chat)</option>
-                    <option value="assistant">Assistant (/assistant)</option>
-                </select>
                 <button type="submit" class="send-icon"></button>
             </div>
         </form>

@@ -18,5 +18,8 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16"
   },
-  "homepage": "https://sonseohy.github.io/ai-frontend"
+  "homepage": "https://sonseohy.github.io/ai-frontend",
+  "dependencies": {
+    "marked": "^15.0.4"
+  }
 }
