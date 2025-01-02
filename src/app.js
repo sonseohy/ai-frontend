@@ -22,12 +22,26 @@ function createMessageBubble(content, sender = "user") {
 
   if (sender === "assistant") {
     bubble.classList.add("assistant-message");
+    // 마크다운 파싱 전에 마크다운 문법이 있는지 확인
+    if (content.includes('#') || 
+        content.includes('*') || 
+        content.includes('`') || 
+        content.includes('-') || 
+        content.includes('1.') ||
+        content.includes('[')) {
+      // 마크다운이 있는 경우만 marked.parse 사용
+      bubble.innerHTML = marked.parse(content, {
+        breaks: true,
+        gfm: true
+      });
+    } else {
+      // 마크다운이 없는 경우 일반 텍스트로 처리
+      bubble.textContent = content;
+    }
   } else {
     bubble.classList.add("user-message");
+    bubble.textContent = content;
   }
-
-  // 줄바꿈 유지
-  bubble.textContent = content;
 
   if (sender === "assistant") {
     wrapper.appendChild(avatar);

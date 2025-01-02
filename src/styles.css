@@ -315,3 +315,107 @@ footer {
     transform: translateY(-10px);
   }
 }
+
+/* 마크다운 스타일링 */
+.assistant-message {
+  line-height: 1.3;
+}
+
+/* 헤더 스타일 */
+.assistant-message h1,
+.assistant-message h2,
+.assistant-message h3,
+.assistant-message h4,
+.assistant-message h5,
+.assistant-message h6 {
+  margin: 0.2em 0 0em 0;  /* 상단 마진 축소, 하단 마진 제거 */
+  line-height: 1.1;
+  padding: 0;
+}
+
+/* 헤더 다음에 오는 모든 요소들의 간격 조정 */
+.assistant-message h1 + *,
+.assistant-message h2 + *,
+.assistant-message h3 + *,
+.assistant-message h4 + *,
+.assistant-message h5 + *,
+.assistant-message h6 + * {
+  margin-top: 0.05em !important;  /* 헤더 다음 요소와의 간격 최소화 */
+}
+
+/* 헤더 이전 요소와의 간격 조정 */
+* + .assistant-message h1,
+* + .assistant-message h2,
+* + .assistant-message h3,
+* + .assistant-message h4,
+* + .assistant-message h5,
+* + .assistant-message h6 {
+  margin-top: 0.1em;  /* 이전 요소와의 간격도 최소화 */
+}
+
+.assistant-message p {
+  margin: 0.3em 0;
+}
+
+.assistant-message p:first-child {
+  margin-top: 0;
+}
+
+.assistant-message p:last-child {
+  margin-bottom: 0;
+}
+
+/* 목록 스타일 수정 */
+.assistant-message ul, 
+.assistant-message ol {
+  margin: 0.1em 0;
+  padding-left: 1.2em;
+}
+
+.assistant-message li {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+
+.assistant-message li + li {
+  margin-top: 0;
+}
+
+/* 숫자 목록 내 하위 불릿 목록 간격 특별 처리 */
+.assistant-message ol > li > ul {
+  margin: -0.1em 0 0 0;
+  padding-top: 0;
+}
+
+/* 서로 다른 목록 유형 간의 간격 조정 */
+.assistant-message ol + ul,
+.assistant-message ul + ol {
+  margin-top: 0;
+}
+
+/* 중첩된 목록의 간격 조정 */
+.assistant-message li > ul,
+.assistant-message li > ol {
+  margin: 0;
+}
+
+.assistant-message code {
+  background-color: #f0f0f0;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.assistant-message pre {
+  background-color: #f0f0f0;
+  padding: 0.8em;
+  border-radius: 5px;
+  margin: 0.3em 0;
+  overflow-x: auto;
+}
+
+.assistant-message pre code {
+  background-color: transparent;
+  padding: 0;
+}
