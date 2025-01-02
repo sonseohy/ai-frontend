@@ -70,6 +70,23 @@ async function getAssistantResponse(userMessage) {
   return data.reply;
 }
 
+// Add loading dots
+function addLoadingDots() {
+  const loadingDiv = document.createElement("div");
+  loadingDiv.classList.add("loading-dots");
+  loadingDiv.innerHTML = '<span>.</span><span>.</span><span>.</span>';
+  chatContainer.appendChild(loadingDiv);
+  scrollToBottom();
+}
+
+// Remove loading dots
+function removeLoadingDots() {
+  const loadingDiv = document.querySelector(".loading-dots");
+  if (loadingDiv) {
+    loadingDiv.remove();
+  }
+}
+
 // Handle form submission
 messageForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -86,10 +103,14 @@ messageForm.addEventListener("submit", async (e) => {
   userInput.value = "";
   scrollToBottom();
 
+  // 로딩 중 표시 추가
+  addLoadingDots();
+
   // Assistant response
   try {
     const response = await getAssistantResponse(message);
     chatContainer.appendChild(createMessageBubble(response, "assistant"));
+    removeLoadingDots();  // 로딩 중 표시 제거
     scrollToBottom();
   } catch (error) {
     console.error("Error fetching assistant response:", error);
@@ -99,6 +120,7 @@ messageForm.addEventListener("submit", async (e) => {
         "assistant"
       )
     );
+    removeLoadingDots();  // 로딩 중 표시 제거
     scrollToBottom();
   }
 });
@@ -122,4 +144,9 @@ textarea.addEventListener("input", function() {
   const newHeight = Math.min(this.scrollHeight, 200);
   this.style.height = newHeight + "px";
   scrollToBottom();
+});
+
+// 로고 클릭 시 페이지 새로고침
+document.getElementById('logo').addEventListener('click', function() {
+  location.reload();  // 페이지 새로고침
 });

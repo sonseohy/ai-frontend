@@ -229,6 +229,10 @@ footer {
   border-radius: 3px;
 }
 
+#logo {
+  cursor: pointer;
+}
+
 /* Send button */
 .send-icon {
   position: absolute;
@@ -272,5 +276,39 @@ footer {
   
   .message-bubble {
     max-width: calc(100% - 2.5rem);
+  }
+}
+
+/* Loading dots animation */
+.loading-dots {
+  font-size: 3rem;
+  color: var(--primary-color);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.loading-dots span {
+  animation: bounce 0.6s infinite alternate;
+  display: inline-block;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
   }
 }
