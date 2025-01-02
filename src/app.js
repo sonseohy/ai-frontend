@@ -27,7 +27,7 @@ function createMessageBubble(content, sender = "user") {
   }
 
   // 줄바꿈 유지
-  bubble.innerHTML = marked(content);  // 변환된 HTML을 innerHTML로 설정
+  bubble.textContent = content;
 
   if (sender === "assistant") {
     wrapper.appendChild(avatar);
